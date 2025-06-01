@@ -1,24 +1,12 @@
-volumes:
-  postgres-data:
-
 services:
-  postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=n8n
-      - POSTGRES_PASSWORD=password
-
   n8n:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ..:/workspaces:cached
-    command: sleep infinity
+    image: docker.n8n.io/n8nio/n8n
     environment:
-      DB_POSTGRESDB_HOST: postgres
-      DB_TYPE: postgresdb
-      DB_POSTGRESDB_PASSWORD: password
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=${DB_POSTGRESDB_HOST}
+      - DB_POSTGRESDB_PORT=${DB_POSTGRESDB_PORT}
+      - DB_POSTGRESDB_DATABASE=${DB_POSTGRESDB_DATABASE}
+      - DB_POSTGRESDB_USER=${DB_POSTGRESDB_USER}
+      - DB_POSTGRESDB_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+    ports:
+      - 5678:5678
